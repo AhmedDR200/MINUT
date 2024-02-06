@@ -9,6 +9,9 @@ dotenv.config();
 // Express app
 const app = express();
 
+// Database connection
+require('./config/db')();
+
 // Body parser middleware
 app.use(express.json({limit: '30kb'}));
 
@@ -18,7 +21,7 @@ if (process.env.NODE_ENV === 'development') {
 };
 
 // Server connection
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`server (${process.env.NODE_ENV}) listening at http://localhost:${port}`)
 });
