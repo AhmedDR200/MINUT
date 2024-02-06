@@ -19,6 +19,9 @@ const reservationSchema = new mongoose.Schema({
     type: Date,
     required: [true, 'End date is required']
   }
+},{
+  timestamps: true,
+  versionKey: false
 });
 
 const Reservation = mongoose.model('Reservation', reservationSchema);

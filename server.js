@@ -3,6 +3,9 @@ const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 
+// Routes
+const propertiesRoutes = require('./routes/propertyRoute')
+
 // Error handling
 const ApiError = require('./utils/apiError');
 const globalError = require('./middlewares/errorMiddleware');
@@ -23,6 +26,9 @@ app.use(express.json({limit: '30kb'}));
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 };
+
+// Mount Routes
+app.use('/properties', propertiesRoutes)
 
 // 404 Error Handling Middleware
 app.all('*', (req, res, next) => {
