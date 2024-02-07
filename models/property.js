@@ -6,6 +6,19 @@ const propertySchema = new mongoose.Schema({
       required: [true, 'Name is required'],
       trim: true,
       unique: true
+    },
+    description: {
+      type: String,
+      required: [true, 'Description is required'],
+      trim: true
+    },
+    price: {
+      type: Number,
+      required: [true, 'Price is required']
+    },
+    location: {
+      type: String,
+      required: [true, 'Location is required']
     }
 },{
     timestamps: true,
