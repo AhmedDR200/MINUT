@@ -9,14 +9,22 @@ const{
     deleteProperty
 } = require('../controllers/propertyController');
 
+const {
+    createPropertyValidetor,
+    updatePropertyValidetor,
+    deletePropertyValidetor,
+    getPropertyValidetor
+} = require('../utils/validetors/propertyValidetor');
+
+
 router.route('/')
 .get(getAllProperties)
-.post(createProperty)
+.post(createPropertyValidetor, createProperty)
 
 router.route('/:id')
-.get(getSingleProperty)
-.put(updateProperty)
-.delete(deleteProperty)
+.get(getPropertyValidetor, getSingleProperty)
+.put(updatePropertyValidetor, updateProperty)
+.delete(deletePropertyValidetor, deleteProperty)
 
 
 module.exports = router;

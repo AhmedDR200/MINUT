@@ -9,14 +9,21 @@ const{
     deleteReservation
 } = require('../controllers/reservationController');
 
+const {
+    createReservationValidetor,
+    updateReservationValidetor,
+    deleteReservationValidetor,
+    getReservationValidetor
+} = require('../utils/validetors/reservationValidetor');
+
 router.route('/')
 .get(getAllReservations)
-.post(createReservation)
+.post(createReservationValidetor, createReservation)
 
 router.route('/:id')
-.get(getSingleReservation)
-.put(updateReservation)
-.delete(deleteReservation)
+.get(getReservationValidetor, getSingleReservation)
+.put(updateReservationValidetor, updateReservation)
+.delete(deleteReservationValidetor, deleteReservation)
 
 
 module.exports = router;
