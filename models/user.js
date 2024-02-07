@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: [true, 'Phone is required'],
     },
     email: {
         type: String,
@@ -24,12 +23,19 @@ const userSchema = new mongoose.Schema({
     },
     address: {
         type: String,
-        required: [true, 'Address is required']
     },
     role: {
         type: String,
         enum: ['guest', 'admin'],
         default: 'guest'
+    },
+    passwordChangedAt: Date,
+    passwordResetCode: String,
+    passwordResetExpires: Date,
+    passwordResetVerified: Boolean,
+    active: {
+        type: Boolean,
+        default: true,
     }
 },{
     versionKey: false,

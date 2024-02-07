@@ -24,6 +24,18 @@ const reservationSchema = new mongoose.Schema({
   versionKey: false
 });
 
+// Populate Mongoose middleware
+reservationSchema.pre(/^find/, function(next){
+  this.populate({
+      path: 'property',
+      select: 'name'
+  }).populate({
+      path: 'guest',
+      select: 'name'
+  })
+  next();
+});
+
 const Reservation = mongoose.model('Reservation', reservationSchema);
 
 module.exports = Reservation;

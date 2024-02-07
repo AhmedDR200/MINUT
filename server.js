@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const propertiesRoutes = require('./routes/propertyRoute');
 const reservationsRoutes = require('./routes/reservationRoute');
 const userRoutes = require('./routes/userRoute');
+const authRoutes = require('./routes/authRoute');
 
 // Error handling
 const ApiError = require('./utils/apiError');
@@ -33,6 +34,7 @@ if (process.env.NODE_ENV === 'Development') {
 app.use('/properties', propertiesRoutes);
 app.use('/reservations', reservationsRoutes);
 app.use('/users', userRoutes);
+app.use('/auth', authRoutes);
 
 // 404 Error Handling Middleware
 app.all('*', (req, res, next) => {
