@@ -5,13 +5,13 @@ const bcrypt = require('bcryptjs');
 
 
 
-const getUserValidator =  [
-    check('id')
-    .isMongoId()
-    .withMessage('Invalid User ID Provided !')
+// const getUserValidator =  [
+//     check('id')
+//     .isMongoId()
+//     .withMessage('Invalid User ID Provided !')
 
-    ,validetorMiddleware
-];
+//     ,validetorMiddleware
+// ];
 
 
 const createUserValidator = [
@@ -51,7 +51,7 @@ const createUserValidator = [
     check('role')
     .notEmpty()
     .withMessage('User Role is Required !')
-    .isIn(['admin', 'guest'])
+    .isIn(['admin', 'user'])
     .withMessage('Invalid User Role Provided !'),
 
     check('phone')
@@ -151,7 +151,7 @@ const updateLoggedUserValidator = [
 ];
 
 module.exports = {
-    getUserValidator,
+    // getUserValidator,
     createUserValidator,
     updateUserValidator,
     deleteUserValidator,

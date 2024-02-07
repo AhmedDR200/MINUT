@@ -1,95 +1,82 @@
 const express = require('express');
 const router = express.Router();
 
-const{ 
+const {
     getAllUsers,
-    getSingleUser,
     createUser,
+    getSingleUser,
     updateUser,
     deleteUser,
-    deactivateLoggedUser,
-    updateLoggedUserData,
-    updateLoggedUserPassword,
+    changePassword,
     getLoggedUserData,
-    changePassword
+    updateLoggedUserPassword,
+    updateLoggedUserData,
+    deactivateLoggedUser
 } = require('../controllers/userController');
 
 const {
     createUserValidator,
+    updateLoggedUserValidator,
     updateUserValidator,
     deleteUserValidator,
-    getUserValidator,
-    changePasswordValidator,
-    updateLoggedUserValidator
+    changePasswordValidator
 } = require('../utils/validetors/userValidetor')
 
 const { protect, allowedTo } = require("../controllers/authController");
 
-// Admin Routes
-router.route('/')
-.get(
-    protect,
-    allowedTo("admin"),
-    getAllUsers
-)
-.post(
-    protect,
-    allowedTo("admin"),
-    createUserValidator,
-    createUser
-);
-
-router.route('/:id')
-.get(
-    getUserValidator,
-    getSingleUser
-)
-.put(
-    protect,
-    allowedTo("admin"),
-    updateUserValidator,
-    updateUser
-)
-.delete(
-    protect,
-    allowedTo("admin"),
-    deleteUserValidator,
-    deleteUser
-);
-
-router.put("/changePassword/:id",
-    protect,
-    allowedTo("admin"),
-    changePasswordValidator,
-    changePassword
-);
-
-
-// Logged User Routes
-router.put('/updateMyPassword',
- protect,
- allowedTo("guest"),   
- updateLoggedUserPassword
-);
-
-router.put('/updateMyData',
- protect,
- allowedTo("guest"),
- updateLoggedUserValidator,
- updateLoggedUserData
-);
-
-router.put('/deactivateMe',
- protect,
- allowedTo("guest"),
- deactivateLoggedUser
-);
 
 router.get("/getMe",
  protect,
  getLoggedUserData,
  getSingleUser,
 );
+
+router.patch("/changeMyPassword",
+ protect,
+ updateLoggedUserPassword,
+);
+
+router.patch("/changeMyData",
+ protect,
+ updateLoggedUserValidator,
+ updateLoggedUserData,
+);
+
+router.delete("/deactivateMe",
+ protect,
+ deactivateLoggedUser,
+);
+
+// Admin can access this routes
+router.use(protect, allowedTo('admin'))
+
+router.patch(
+    "/changePassword/:id",
+    changePasswordValidator,
+    changePassword
+);
+
+router.route('/')
+.get(protect, allowedTo('admin'), getAllUsers)
+.post(
+    createUserValidator,
+    createUser
+);
+
+router.route('/:id')
+.get(
+    // getUserValidator,
+    getSingleUser
+)
+.patch(
+    updateUserValidator,
+    updateUser
+)
+.delete(
+    deleteUserValidator,
+    deleteUser
+);
+
 
 
 module.exports = router;

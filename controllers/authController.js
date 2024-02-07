@@ -88,6 +88,8 @@ exports.protect = asyncHandler(
                 return next(new ApiError("User recntly changed his password, please login again...", 401))
             }
         }
+        // console.log("User successfully authenticated:", currentUser);
+
         req.user = currentUser;
         next();
     }

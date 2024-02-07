@@ -26,8 +26,8 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['guest', 'admin'],
-        default: 'guest'
+        enum: ['user', 'admin'],
+        default: 'user'
     },
     passwordChangedAt: Date,
     passwordResetCode: String,

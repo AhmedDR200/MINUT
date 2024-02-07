@@ -152,24 +152,23 @@ exports.updateLoggedUserPassword = asyncHandler(
  * @route   PATCH /users/updateMyData
  * @access  Private/ Logged User
  */
-exports.updateLoggedUserData = asyncHandler(
-    async(req, res, next) => {
-        const updatedUser = await User.findByIdAndUpdate(
-            req.user._id,
-            {
-                name: req.body.name,
-                email: req.body.email,
-                phone: req.body.phone,
-            },
-            { new: true }
-        );
+exports.updateLoggedUserData = asyncHandler(async (req, res, next) => {
 
-        res.status(200).json({
-            status: 'success',
-            data: updatedUser,
-        });
-    }
-);
+    const updatedUser = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
+        },
+        { new: true }
+    );
+
+    res.status(200).json({
+        status: 'success',
+        data: updatedUser,
+    });
+});
 
 
 /**
@@ -200,17 +199,12 @@ exports.deleteUser = asyncHandler(
  */
 exports.deactivateLoggedUser = asyncHandler(
     async(req, res, next) => {
-        await User.findByIdAndUpdate(
-            req.user._id,
-            {
-                active: false
-            }
-        );
-
-        res.status(200).json({
-            status: 'success',
-            message: 'User Deactivated Successfully'
-        });
+      await User.findByIdAndUpdate(req.user._id, {active: false});
+  
+      res.status(204).json({
+        status: 'success',
+        message: 'User Deactivated Successfully'
+      })
     }
 );
 
