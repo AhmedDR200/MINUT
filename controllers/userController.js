@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/apiError');
 const User = require('../models/user');
+const bcrypt = require('bcryptjs');
+const createToken = require('../utils/createToken');
 
 
 /**
@@ -66,7 +68,15 @@ exports.createUser = asyncHandler(
  */
 exports.updateUser = asyncHandler(
     async (req, res, next) => {
-        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            {
+                name: req.body.name,
+                email: req.body.email,
+                phone: req.body.phone,
+                role: req.body.role
+            },
+            { new: true, runValidators: true });
 
         if (!user) {
             return next(new ApiError(`User not found with id of ${req.params.id}`, 404));
@@ -75,6 +85,88 @@ exports.updateUser = asyncHandler(
         res.status(200).json({
             status: 'success',
             data: user
+        });
+    }
+);
+
+
+/**
+ * @desc    Update a user password
+ * @route   PUT /users/changePassword/:id
+ * @access  Private/ Admin
+ */
+exports.changePassword = asyncHandler(
+    async(req, res, next) => {
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            {
+                password: await bcrypt.hash(req.body.password, 12),
+                passwordChangedAt: Date.now(),
+            },
+            { new: true }
+        );
+
+        if(!user){
+            return next(new ApiError(`User not found with id of ${req.params.id}`, 404));
+        }
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Password updated successfully',
+            data: user
+        });
+    }
+);
+
+
+/**
+ * @desc    Update logged user password
+ * @route   PUT /users/updateMyPassword
+ * @access  Private/ Logged User
+ */
+exports.updateLoggedUserPassword = asyncHandler(
+    async(req, res, next) => {
+        const user = await User.findByIdAndUpdate(
+            req.user._id,
+            {
+                password: await bcrypt.hash(req.body.password, 12),
+                passwordChangedAt: Date.now(),
+            },
+            { new: true }
+        );
+
+        // generate new token
+        const token = createToken(user._id);
+
+        res.status(200).json({
+            status: 'success',
+            data: user,
+            token: token
+        });
+    }
+);
+
+
+/**
+ * @desc    Update logged user data without password and role
+ * @route   PATCH /users/updateMyData
+ * @access  Private/ Logged User
+ */
+exports.updateLoggedUserData = asyncHandler(
+    async(req, res, next) => {
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user._id,
+            {
+                name: req.body.name,
+                email: req.body.email,
+                phone: req.body.phone,
+            },
+            { new: true }
+        );
+
+        res.status(200).json({
+            status: 'success',
+            data: updatedUser,
         });
     }
 );
@@ -97,5 +189,40 @@ exports.deleteUser = asyncHandler(
             status: 'success',
             data: null
         });
+    }
+);
+
+
+/**
+ * @desc    Deactivate logged user
+ * @route   DELETE /users/deactivateMe
+ * @access  Private/ Logged User
+ */
+exports.deactivateLoggedUser = asyncHandler(
+    async(req, res, next) => {
+        await User.findByIdAndUpdate(
+            req.user._id,
+            {
+                active: false
+            }
+        );
+
+        res.status(200).json({
+            status: 'success',
+            message: 'User Deactivated Successfully'
+        });
+    }
+);
+
+
+/**
+ * @desc Fetch logged user data
+ * @route   GET /users/getMe
+ * @access  Private/ Logged User
+ */
+exports.getLoggedUserData = asyncHandler(
+    async(req, res, next) => {
+      req.params.id = req.user._id;
+      next();
     }
 );
