@@ -20,6 +20,9 @@ dotenv.config();
 // Express app
 const app = express();
 
+// Compression middleware
+app.use(require('compression')());
+
 // Database connection
 require('./config/db')();
 
@@ -30,6 +33,19 @@ app.use(express.json({limit: '30kb'}));
 if (process.env.NODE_ENV === 'Development') {
   app.use(morgan('dev'));
 };
+
+// Data sanitization against NoSQL query injection
+const mongoSanitize = require('express-mongo-sanitize');
+app.use(mongoSanitize());
+
+// Rate limiting middleware
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour'
+});
+app.use('/api', limiter);
 
 // Mount Routes
 app.use('/api/v1/properties', propertiesRoutes);
@@ -52,7 +68,7 @@ app.use(globalError);
 // Server connection
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
-    console.log(`server (${process.env.NODE_ENV}) listening at http://localhost:${port}`)
+    console.log(`server (${process.env.NODE_ENV} Mode) listening at http://localhost:${port}`)
 });
 
 // Events => Event Loop => Callback Queue => Event Loop => Event Handler
