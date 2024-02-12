@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const sendEmail = require('../utils/sendEmail');
 const createToken = require('../utils/createToken')
+const { sanitizeUser } = require('../utils/sanitizeData');
 
 
 /**
@@ -26,7 +27,7 @@ exports.signup = asyncHandler(
 
         res.status(201).json({
             status: 'success',
-            data: user,
+            data: sanitizeUser(user),
             token: token
         })
     }
@@ -51,7 +52,7 @@ exports.login = asyncHandler(
 
         res.status(200).json({
             status: 'success',
-            data: user,
+            data: sanitizeUser(user),
             token: token
         })
     }
