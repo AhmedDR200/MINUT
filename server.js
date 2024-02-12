@@ -1,3 +1,6 @@
+// Core modules
+// const heapdump = require('heapdump');
+
 // 3rd party modules
 const express = require('express');
 const morgan = require('morgan');
@@ -19,6 +22,9 @@ dotenv.config();
 
 // Express app
 const app = express();
+
+// Heapdump
+// heapdump.writeSnapshot('./' + Date.now() + '.heapsnapshot');
 
 // Compression middleware
 app.use(require('compression')());
