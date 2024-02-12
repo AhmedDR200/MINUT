@@ -2,14 +2,16 @@ const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema({
     sender: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: [true, 'Sender is required'],
     },
     receiver: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: [true, 'Receiver is required'],
     },
-    message: {
+    body: {
         type: String,
         required: true
     },

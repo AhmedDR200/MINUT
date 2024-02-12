@@ -8,6 +8,7 @@ const propertiesRoutes = require('./routes/propertyRoute');
 const reservationsRoutes = require('./routes/reservationRoute');
 const userRoutes = require('./routes/userRoute');
 const authRoutes = require('./routes/authRoute');
+const messagesRoutes = require('./routes/messageRoute');
 
 // Error handling
 const ApiError = require('./utils/apiError');
@@ -35,6 +36,7 @@ app.use('/api/v1/properties', propertiesRoutes);
 app.use('/api/v1/reservations', reservationsRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/messages', messagesRoutes);
 
 // 404 Error Handling Middleware
 app.all('*', (req, res, next) => {
