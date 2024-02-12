@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/apiError');
 const User = require('../models/user');
+const Reservation = require('../models/reservation');
 const bcrypt = require('bcryptjs');
 const createToken = require('../utils/createToken');
 
@@ -218,5 +219,34 @@ exports.getLoggedUserData = asyncHandler(
     async(req, res, next) => {
       req.params.id = req.user._id;
       next();
+    }
+);
+
+
+/**
+ * @desc    Logged user make a reservation
+ * @route   POST /users/makeReservation
+ * @access  Private/ Logged User
+ */
+exports.makeReservation = asyncHandler(
+    async(req, res, next) => {
+        const userId = req.user._id
+        const { propertyId, startDate, endDate } = req.body;
+
+        const reservation = await Reservation.create({
+            guest: userId,
+            property: propertyId,
+            startDate,
+            endDate
+        });
+
+        if(!reservation){
+            return next(new ApiError(" Reservation failed", 400));
+        }
+
+        res.status(201).json({
+            status: 'success',
+            data: reservation
+        });
     }
 );

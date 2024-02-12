@@ -11,7 +11,8 @@ const {
     getLoggedUserData,
     updateLoggedUserPassword,
     updateLoggedUserData,
-    deactivateLoggedUser
+    deactivateLoggedUser,
+    makeReservation
 } = require('../controllers/userController');
 
 const {
@@ -45,6 +46,11 @@ router.patch("/changeMyData",
 router.delete("/deactivateMe",
  protect,
  deactivateLoggedUser,
+);
+
+router.post("/makeReservation",
+ protect,
+ makeReservation
 );
 
 // Admin can access this routes

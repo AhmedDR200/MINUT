@@ -31,10 +31,10 @@ if (process.env.NODE_ENV === 'Development') {
 };
 
 // Mount Routes
-app.use('/properties', propertiesRoutes);
-app.use('/reservations', reservationsRoutes);
-app.use('/users', userRoutes);
-app.use('/auth', authRoutes);
+app.use('/api/v1/properties', propertiesRoutes);
+app.use('/api/v1/reservations', reservationsRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 // 404 Error Handling Middleware
 app.all('*', (req, res, next) => {
